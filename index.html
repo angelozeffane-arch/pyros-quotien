@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0C0E17">
+<title>PYROS — Quotidien</title>
+<link rel="manifest" href="manifest-quotidien.json">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#161826; --deep:#0C0E17; --card:#181B2B; --card2:#1E2136;
+  --lav:#9184d9; --lav2:#B4A9F0; --ink:#F2F2F8; --mut:#9598B2;
+  --line:rgba(145,132,217,.20); --line2:rgba(145,132,217,.40);
+  --hot:#E8734A; --ok:#7FD8A8; --warn:#E8C24A;
+  --nav:78px;
+  --grid:rgba(145,132,217,.05);
+  --glass:rgba(10,11,19,.97);
+  --veil:rgba(8,9,16,.95);
+  --btnink:#12121C;
+  --top:#20233A;
+}
+/* ---------- thème clair ---------- */
+body.clair{
+  --navy:#FFFFFF; --deep:#F4F4F8; --card:#FFFFFF; --card2:#FBFBFD;
+  --lav:#6C5CC7; --lav2:#5A49B8; --ink:#171A28; --mut:#6E7189;
+  --line:rgba(108,92,199,.20); --line2:rgba(108,92,199,.38);
+  --hot:#B84A22; --ok:#207D55; --warn:#966A05;
+  --grid:rgba(108,92,199,.055);
+  --glass:rgba(255,255,255,.97);
+  --veil:rgba(244,244,248,.95);
+  --btnink:#FFFFFF;
+  --top:#EDEBF8;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--deep);color:var(--ink);
+  font-family:Inter,system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;padding-bottom:calc(var(--nav) + env(safe-area-inset-bottom,0px) + 12px)}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px}
+button{font:inherit;cursor:pointer}
+input,select,textarea{font:inherit}
+
+/* fond high-tech */
+body:before{content:"";position:fixed;inset:0;z-index:-2;
+  background:radial-gradient(circle at 50% -8%,var(--top),var(--deep) 62%)}
+body:after{content:"";position:fixed;inset:0;z-index:-1;opacity:.5;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),
+                   linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:56px 56px}
+
+/* ---- entête ---- */
+header{padding:22px 0 8px}
+.htop{display:flex;align-items:center;gap:13px}
+.ring{width:46px;height:46px;flex:0 0 auto;border-radius:50%;border:1.5px solid var(--line2);
+  background:radial-gradient(circle at 50% 42%,var(--card2),var(--top));display:grid;place-items:center;position:relative}
+.ring svg{width:24px;height:24px}
+.htop h1{font-size:19px;font-weight:600;letter-spacing:-.02em;margin:0}
+.htop p{margin:3px 0 0;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+.htop p #hheure{color:var(--lav2);font-size:14px;font-weight:500;letter-spacing:.04em}
+.hbtn{background:none;border:1px solid var(--line);color:var(--mut);
+  border-radius:999px;padding:8px 13px;font-size:12.5px}
+.hbtn:hover{border-color:var(--lav);color:var(--ink)}
+
+/* ---- blocs ---- */
+.kick{font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--lav);margin:26px 0 11px;
+  display:flex;align-items:center;gap:10px}
+.kick:after{content:"";flex:1;height:1px;background:var(--line)}
+.card{border:1px solid var(--line);border-radius:16px;padding:17px;
+  background:linear-gradient(160deg,var(--card2),var(--card));margin-bottom:12px}
+body.clair .card{box-shadow:0 1px 2px rgba(23,26,40,.05),0 8px 24px -18px rgba(23,26,40,.35)}
+body.clair .sbox,body.clair nav{box-shadow:0 -8px 30px -20px rgba(23,26,40,.45)}
+.card.tight{padding:13px 15px}
+.row{display:flex;align-items:center;gap:12px}
+.grow{flex:1;min-width:0}
+.mut{color:var(--mut)}
+.sm{font-size:12.5px}
+.xs{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+.big{font-size:30px;font-weight:600;letter-spacing:-.02em;line-height:1.1}
+.mid{font-size:20px;font-weight:600;letter-spacing:-.01em}
+.hot{color:var(--hot)}.ok{color:var(--ok)}.warn{color:var(--warn)}.lav{color:var(--lav2)}
+.trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ---- champs ---- */
+.field{width:100%;background:var(--deep);border:1px solid var(--line);color:var(--ink);
+  border-radius:12px;padding:12px 14px;font-size:15px;outline:none}
+.field:focus{border-color:var(--lav)}
+.field::placeholder{color:var(--mut)}
+select.field{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--mut) 50%),linear-gradient(135deg,var(--mut) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:38px}
+.frow{display:flex;gap:9px;margin-bottom:9px}
+.frow .field{min-width:0}
+.btn{background:var(--lav);border:none;color:var(--btnink);border-radius:12px;padding:12px 18px;font-weight:600;font-size:14px}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:none;border:1px solid var(--line2);color:var(--ink);font-weight:400}
+.btn.mini{padding:8px 13px;font-size:12.5px;border-radius:9px}
+.btn.danger{border-color:rgba(232,115,74,.45);color:var(--hot)}
+.chips{display:flex;gap:7px;flex-wrap:wrap}
+.chip{background:none;border:1px solid var(--line);color:var(--mut);border-radius:999px;padding:7px 13px;font-size:12.5px}
+.chip.on{background:var(--lav);border-color:var(--lav);color:var(--btnink);font-weight:500}
+
+/* ---- barres ---- */
+.bar{height:7px;border-radius:4px;background:var(--line);overflow:hidden;margin:9px 0 0}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--lav),var(--lav2));transition:width .45s}
+.bar.hot i{background:linear-gradient(90deg,#C4603C,var(--hot))}
+.bar.ok i{background:linear-gradient(90deg,#4FA97C,var(--ok))}
+.cats{margin-top:6px}
+.catrow{display:flex;align-items:center;gap:10px;margin-top:9px;font-size:13px}
+.catrow .nm{width:96px;flex:0 0 auto;color:#C9CBDD}
+.catrow .bar{flex:1;margin:0}
+.catrow .vl{width:74px;text-align:right;flex:0 0 auto;color:var(--mut);font-size:12.5px}
+
+/* ---- listes ---- */
+.item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:none}
+.tick{width:26px;height:26px;flex:0 0 auto;border-radius:8px;border:1.5px solid var(--line2);
+  background:none;display:grid;place-items:center;padding:0}
+.tick svg{width:15px;height:15px;opacity:0;transition:.15s}
+.tick.on{border-color:var(--ok);background:rgba(127,216,168,.14)}
+.tick.on svg{opacity:1}
+.done .ttxt{text-decoration:line-through;color:var(--mut)}
+.ttxt{font-size:14.5px}
+.x{background:none;border:none;color:var(--mut);font-size:19px;line-height:1;padding:6px 2px;opacity:.55}
+.x:hover{opacity:1;color:var(--hot)}
+.star{background:none;border:none;padding:6px 2px;line-height:1}
+.star svg{width:17px;height:17px}
+.empty{text-align:center;color:var(--mut);font-size:13.5px;padding:22px 10px}
+
+/* ---- météo ---- */
+.meteo{display:flex;align-items:center;gap:15px}
+.meteo .ic{width:56px;height:56px;flex:0 0 auto}
+.meteo .tp{font-size:32px;font-weight:600;letter-spacing:-.03em;line-height:1}
+.meteo .lb{font-size:13.5px;color:#C9CBDD;margin-top:3px}
+.meteo .vl{font-size:11.5px;color:var(--mut);margin-top:3px}
+.meteo .mm{text-align:right;font-size:12.5px;color:var(--mut);line-height:1.7}
+.meteo .mm b{color:var(--ink);font-weight:500}
+.jours{display:flex;gap:8px;margin-top:15px;overflow-x:auto;scrollbar-width:none}
+.jours::-webkit-scrollbar{display:none}
+.jr{flex:0 0 62px;text-align:center;border:1px solid var(--line);border-radius:12px;padding:9px 4px}
+.jr .d{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.jr svg{width:26px;height:26px;margin:5px 0 3px}
+.jr .t{font-size:12.5px}
+.jr .t span{color:var(--mut)}
+
+
+/* ---- calendrier ---- */
+.calhead{display:flex;align-items:center;gap:10px;margin-bottom:13px}
+.calhead .m{flex:1;text-align:center;font-size:15px;font-weight:600;text-transform:capitalize}
+.calnav{background:none;border:1px solid var(--line);color:var(--ink);border-radius:9px;
+  width:34px;height:34px;font-size:16px;line-height:1;padding:0}
+.calnav:hover{border-color:var(--lav)}
+.cgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cd{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);text-align:center;padding-bottom:4px}
+.cc{aspect-ratio:1;border:1px solid transparent;border-radius:10px;background:none;color:var(--ink);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:0;position:relative}
+.cc.mois{border-color:var(--line)}
+.cc.hors{opacity:.28}
+.cc .n{font-size:13.5px;font-family:"JetBrains Mono",monospace}
+.cc.auj{border-color:var(--lav);background:var(--line)}
+.cc.auj .n{font-weight:600;color:var(--lav2)}
+.cc.sel{border-color:var(--lav2);box-shadow:inset 0 0 0 1px var(--lav2)}
+.pts{display:flex;gap:2.5px;height:5px}
+.pt{width:5px;height:5px;border-radius:50%;background:var(--lav)}
+.pt.dep{background:var(--hot)}
+.cc .som{position:absolute;bottom:2px;font-size:8.5px;color:var(--mut)}
+
+/* ---- citation ---- */
+.quote{border:1px solid var(--line2);border-radius:16px;padding:20px;
+  background:linear-gradient(140deg,var(--line),transparent 62%)}
+.quote p{margin:0;font-size:16.5px;line-height:1.45;font-weight:500;letter-spacing:-.01em}
+.quote .more{margin-top:13px;background:none;border:1px solid var(--line);color:var(--mut);
+  border-radius:999px;padding:6px 13px;font-size:12px}
+
+/* ---- focus ---- */
+.focus{position:fixed;inset:0;z-index:90;background:var(--veil);display:none;
+  flex-direction:column;align-items:center;justify-content:center;padding:26px;text-align:center}
+.focus.on{display:flex}
+.fring{width:230px;height:230px;position:relative;display:grid;place-items:center;margin-bottom:26px}
+.fring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.fring .t{font-size:44px;font-weight:600;letter-spacing:-.03em}
+.focus h3{font-size:20px;font-weight:600;margin:0 0 6px;max-width:16ch;line-height:1.25}
+.focus .sub{color:var(--mut);font-size:13.5px;margin:0 0 26px;max-width:30ch}
+.fbtns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+
+/* ---- nav bas ---- */
+nav{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--glass);
+  border-top:1px solid var(--line);padding:9px 6px calc(9px + env(safe-area-inset-bottom,0px))}
+.nrow{display:flex;max-width:760px;margin:0 auto}
+.nb{flex:1;background:none;border:none;color:var(--mut);display:flex;flex-direction:column;
+  align-items:center;gap:5px;padding:5px 2px;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.nb svg{width:23px;height:23px}
+.nb.on{color:var(--lav2)}
+.nb.on svg{filter:drop-shadow(0 0 7px var(--line2))}
+
+.view{display:none}
+.view.on{display:block;animation:fade .32s ease}
+@keyframes fade{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+.sheet{position:fixed;inset:0;z-index:80;background:var(--veil);display:none;
+  align-items:flex-end;justify-content:center}
+.sheet.on{display:flex}
+.sbox{width:100%;max-width:760px;border-radius:20px 20px 0 0;border:1px solid var(--line2);border-bottom:none;
+  background:linear-gradient(160deg,var(--card2),var(--card));padding:22px 18px calc(26px + env(safe-area-inset-bottom,0px));max-height:88vh;overflow:auto}
+.sbox h3{margin:0 0 15px;font-size:17px;font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="htop">
+      <span class="ring">
+        <svg viewBox="0 0 200 200" fill="none" style="stroke:var(--ink)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="100" cy="100" r="62" style="stroke:var(--lav)"/><path d="M100 58 v46 l32 20"/>
+        </svg>
+      </span>
+      <div class="grow">
+        <h1 id="hdate">—</h1>
+        <p id="hsub"><span class="mono" id="hheure">--:--:--</span> &middot; PYROS Quotidien</p>
+      </div>
+      <button class="hbtn" id="btnTheme" title="Thème" style="margin-left:auto">◐</button>
+      <button class="hbtn" id="btnMenu" style="margin-left:8px">···</button>
+    </div>
+  </header>
+
+  <!-- ================= AUJOURD'HUI ================= -->
+  <section class="view on" id="v-jour">
+    <div class="card" id="cMeteo"></div>
+    <div class="quote" id="quote"></div>
+
+    <div class="kick">Priorités — trois, pas plus</div>
+    <div class="card" id="prios"></div>
+
+    <div class="card tight" id="cAvance">
+      <div class="row">
+        <span class="grow"><span class="xs">Avancement du jour</span>
+          <div class="mid mono" id="kTaches">0 / 0</div></span>
+        <button class="btn mini ghost" id="goTaches">Tout voir</button>
+      </div>
+      <div class="bar ok" id="barTaches"><i></i></div>
+    </div>
+
+    <div class="kick">Tâches du jour</div>
+    <div class="card" id="tachesJour"></div>
+
+    <div class="kick">Habitudes du jour</div>
+    <div class="card" id="habsJour"></div>
+
+    <div class="kick">Capture rapide</div>
+    <div class="card tight">
+      <div class="frow" style="margin:0">
+        <input class="field grow" id="qcap" placeholder="Vider la tête ici…">
+        <button class="btn" id="qcapGo">+</button>
+      </div>
+      <p class="sm mut" style="margin:10px 0 0">Ça part dans les notes. Tu tries plus tard, pas maintenant.</p>
+    </div>
+    <div class="kick">Dernières notes</div>
+    <div class="card" id="notesJour"></div>
+    <button class="btn mini ghost" id="goNotes" style="margin:-4px 0 4px">Toutes les notes</button>
+
+    <div class="kick">Dépenses du jour</div>
+    <div class="card">
+      <div class="row">
+        <div class="grow">
+          <div class="xs">Dépensé aujourd'hui</div>
+          <div class="big mono" id="kJour">0 €</div>
+        </div>
+        <div style="text-align:right">
+          <div class="xs">Ce mois</div>
+          <div class="mid mono" id="kMois">0 €</div>
+        </div>
+      </div>
+      <div class="bar" id="barBudget"><i></i></div>
+      <p class="sm mut" id="txtBudget" style="margin:9px 0 0"></p>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div class="grow">
+          <div class="xs">Ce mois</div>
+          <div class="mid mono" id="kMoisBis">0 €</div>
+        </div>
+        <div style="text-align:right">
+          <div class="xs">Épargne</div>
+          <div class="mid mono ok" id="kEpargne">0 €</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ================= ARGENT ================= -->
+  <section class="view" id="v-argent">
+    <div class="kick">Ajouter une dépense</div>
+    <div class="card">
+      <div class="frow">
+        <input class="field mono" id="dMontant" type="number" inputmode="decimal" step="0.01" placeholder="0,00" style="flex:0 0 118px">
+        <input class="field grow" id="dLib" placeholder="Quoi ?">
+      </div>
+      <div class="frow" style="margin-bottom:0">
+        <select class="field grow" id="dCat"></select>
+        <button class="btn" id="dGo">Ajouter</button>
+      </div>
+    </div>
+
+    <div class="kick">Le mois <span class="mono" id="moisNom" style="letter-spacing:0;text-transform:none;color:var(--mut)"></span></div>
+    <div class="card">
+      <div class="row">
+        <div class="grow">
+          <div class="xs">Total du mois</div>
+          <div class="big mono" id="aMois">0 €</div>
+        </div>
+        <div style="text-align:right">
+          <div class="xs">Moyenne / jour</div>
+          <div class="mid mono" id="aMoy">0 €</div>
+        </div>
+      </div>
+      <div class="bar" id="aBar"><i></i></div>
+      <p class="sm mut" id="aTxt" style="margin:9px 0 0"></p>
+      <div class="cats" id="aCats"></div>
+    </div>
+
+    <div class="kick">Dernières dépenses</div>
+    <div class="card" id="aListe"></div>
+  </section>
+
+  <!-- ================= ÉPARGNE ================= -->
+  <section class="view" id="v-epargne">
+    <div class="kick">Total mis de côté</div>
+    <div class="card">
+      <div class="big mono ok" id="eTotal">0 €</div>
+      <p class="sm mut" style="margin:7px 0 0" id="eSous"></p>
+    </div>
+
+    <div class="kick">Objectifs</div>
+    <div id="eObjs"></div>
+
+    <div class="card">
+      <div class="frow">
+        <input class="field grow" id="eNom" placeholder="Nouvel objectif (ex : matériel photo)">
+      </div>
+      <div class="frow" style="margin-bottom:0">
+        <input class="field mono grow" id="eCible" type="number" inputmode="decimal" placeholder="Montant visé">
+        <button class="btn" id="eGo">Créer</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TÂCHES ================= -->
+  <section class="view" id="v-taches">
+    <div class="kick">Ajouter</div>
+    <div class="card">
+      <div class="frow" style="margin-bottom:0">
+        <input class="field grow" id="tTxt" placeholder="Une tâche, une seule action">
+        <button class="btn" id="tGo">+</button>
+      </div>
+      <div class="chips" style="margin-top:11px">
+        <button class="chip on" data-quand="jour">Aujourd'hui</button>
+        <button class="chip" data-quand="demain">Demain</button>
+        <button class="chip" data-quand="libre">Sans date</button>
+        <button class="chip" data-quand="hab">Habitude</button>
+      </div>
+    </div>
+
+    <div class="kick">Aujourd'hui</div>
+    <div class="card" id="tJour"></div>
+
+    <div class="kick">Habitudes</div>
+    <div class="card" id="tHabs"></div>
+
+    <div class="kick">Plus tard / sans date</div>
+    <div class="card" id="tLibre"></div>
+
+    <div class="kick">Fait aujourd'hui</div>
+    <div class="card" id="tFait"></div>
+  </section>
+
+  <!-- ================= NOTES ================= -->
+  <section class="view" id="v-notes">
+    <div class="kick">Nouvelle note</div>
+    <div class="card">
+      <textarea class="field" id="nTxt" rows="3" placeholder="Idée, rappel, truc à ne pas oublier…"></textarea>
+      <div class="row" style="margin-top:10px">
+        <span class="sm mut grow">Une note peut devenir une tâche d'un tap.</span>
+        <button class="btn mini" id="nGo">Enregistrer</button>
+      </div>
+    </div>
+    <div class="kick">Notes</div>
+    <div id="nListe"></div>
+  </section>
+
+  <!-- ================= AGENDA ================= -->
+  <section class="view" id="v-agenda">
+    <div class="kick">Ajouter au planning</div>
+    <div class="card">
+      <div class="frow">
+        <input class="field grow" id="gTxt" placeholder="Quoi ?">
+      </div>
+      <div class="frow" style="margin-bottom:0">
+        <input class="field mono" id="gDate" type="date" style="flex:1">
+        <input class="field mono" id="gHeure" type="time" style="flex:0 0 118px">
+        <button class="btn" id="gGo">+</button>
+      </div>
+    </div>
+    <div class="card tight">
+      <div class="row"><span class="grow sm">Rappels sur le téléphone</span>
+        <button class="btn mini ghost" id="icsAll">Envoyer au calendrier</button></div>
+      <p class="sm mut" style="margin:9px 0 0">Le calendrier du téléphone sonne même app fermée. C'est lui qui fait les vraies alertes.</p>
+    </div>
+    <div class="kick">Le mois</div>
+    <div class="card" id="cal"></div>
+
+    <div class="kick" id="kJourSel">Le jour</div>
+    <div class="card" id="gJour"></div>
+
+    <div class="kick">Les 14 prochains jours</div>
+    <div id="gListe"></div>
+    <div class="kick">Passé</div>
+    <div class="card" id="gVieux"></div>
+  </section>
+</div>
+
+<!-- ---- focus ---- -->
+<div class="focus" id="focus">
+  <div class="fring">
+    <svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="45" fill="none" style="stroke:var(--line)" stroke-width="3"/>
+      <circle id="fArc" cx="50" cy="50" r="45" fill="none" style="stroke:var(--lav)" stroke-width="3"
+              stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="0"/>
+    </svg>
+    <span class="t mono" id="fTime">05:00</span>
+  </div>
+  <h3 id="fTxt">—</h3>
+  <p class="sub">Rien d'autre à faire pendant ce temps. Si tu t'arrêtes avant, ce n'est pas grave.</p>
+  <div class="fbtns">
+    <button class="btn" id="fDone">C'est fait</button>
+    <button class="btn ghost" id="fPause">Pause</button>
+    <button class="btn ghost" id="fQuit">Fermer</button>
+  </div>
+</div>
+
+<!-- ---- feuille ---- -->
+<div class="sheet" id="sheet"><div class="sbox" id="sbox"></div></div>
+
+<nav>
+  <div class="nrow">
+    <button class="nb on" data-v="jour"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10V20h13V10"/></svg>Jour</button>
+    <button class="nb" data-v="argent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12.5" rx="2.5"/><circle cx="12" cy="12.2" r="2.8"/></svg>Argent</button>
+    <button class="nb" data-v="epargne"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20v-6.5a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6V20"/><path d="M7 20v-2.5M17 20v-2.5"/><circle cx="15.5" cy="12" r="1"/></svg>Épargne</button>
+    <button class="nb" data-v="taches"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7l2 2 3.5-3.5"/><path d="M3.5 17l2 2 3.5-3.5"/><path d="M12.5 7.5h8M12.5 17.5h8"/></svg>Tâches</button>
+    <button class="nb" data-v="notes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="15" height="17" rx="2.5"/><path d="M8.5 8.5h7M8.5 12.5h7M8.5 16.5h4"/></svg>Notes</button>
+    <button class="nb" data-v="agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3.5v3M16 3.5v3"/></svg>Agenda</button>
+  </div>
+</nav>
+
+<script>
+"use strict";
+
+/* ============ état ============ */
+const KEY = "pyros_quotidien_v1";
+const DEF = { v:1, depenses:[], budget:null, objectifs:[], taches:[], habitudes:[], notes:[], events:[] };
+let S = JSON.parse(JSON.stringify(DEF));
+try { const raw = localStorage.getItem(KEY); if (raw) Object.assign(S, JSON.parse(raw)); } catch(e){}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} };
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+
+/* ============ dates ============ */
+const pad = n => String(n).padStart(2,"0");
+const iso = d => d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate());
+const TODAY = () => iso(new Date());
+const DEMAIN = () => { const d = new Date(); d.setDate(d.getDate()+1); return iso(d); };
+const MOIS = () => TODAY().slice(0,7);
+const frDate = s => { const [a,m,j] = s.split("-"); return new Date(+a, +m-1, +j)
+  .toLocaleDateString("fr-FR",{weekday:"long", day:"numeric", month:"long"}); };
+const eur = n => (Math.round(n*100)/100).toLocaleString("fr-FR",{minimumFractionDigits:(n%1?2:0), maximumFractionDigits:2}) + " €";
+
+/* ============ messages ============ */
+const MSG = [
+ "Aujourd'hui, une seule chose bien faite suffit à sauver la journée.",
+ "Tu n'as pas à être motivé pour commencer. Commencer crée la motivation, jamais l'inverse.",
+ "Une journée ratée n'annule pas les précédentes. Elle ne compte que si tu arrêtes.",
+ "Si la tâche te paraît énorme, c'est qu'elle n'est pas encore découpée assez petit.",
+ "Cinq minutes de fait valent mieux qu'une heure parfaite jamais commencée.",
+ "Le désordre d'hier ne dit rien de ce que tu vaux. Il dit juste que tu étais fatigué.",
+ "Tu peux faire les choses mal et quand même les faire. C'est souvent la seule option.",
+ "Ce qui n'est pas écrit n'existe pas. Note-le, ta tête a mieux à faire.",
+ "Personne ne tient tout, tous les jours. Choisis ce qui doit tenir aujourd'hui.",
+ "Le plus dur, c'est de s'asseoir. Le reste vient presque toujours tout seul.",
+ "Un jour sans rien faire fait aussi partie du plan. Vraiment.",
+ "Compare-toi à toi il y a six mois, pas à quelqu'un qui a une autre vie.",
+ "Tu as le droit de ne pas finir. Tu n'as pas le droit de tout effacer.",
+ "Ranger une seule chose change l'ambiance de toute une pièce.",
+ "Ce que tu remets à demain te coûte plus cher en tête qu'en temps.",
+ "Un budget ne sert pas à se priver. Il sert à savoir où tu es.",
+ "L'argent parti n'est plus le sujet. Le prochain euro, si.",
+ "Tu n'es pas en retard. Tu es sur ton propre calendrier.",
+ "Faire à 60 %, régulièrement, bat faire à 100 %, une fois tous les trois mois.",
+ "Le perfectionnisme est juste de la peur bien habillée.",
+ "Ta fatigue est une donnée, pas un défaut. Organise avec, pas contre.",
+ "Le matériel ne fera pas le travail. Toi non plus, si tu ne commences pas.",
+ "Note maintenant, décide plus tard. Les deux en même temps, ça bloque.",
+ "Il y a des jours où survivre à la journée, c'est la réussite du jour.",
+ "Coupe la tâche en deux. Encore en deux. Maintenant commence.",
+ "Ce que tu fais aujourd'hui pour toi de la semaine prochaine, c'est un cadeau.",
+ "Tu n'as pas besoin d'un système parfait. Tu as besoin d'un système que tu ouvres.",
+ "Une chose à la fois, ce n'est pas une limite. C'est la méthode.",
+ "L'élan revient toujours. Il faut juste ne pas tout brûler en l'attendant.",
+ "Un imprévu n'est pas un échec de planning. C'est la vie qui passe.",
+ "Écris ce que tu as fait, pas seulement ce qu'il reste. Sinon tu ne vois jamais rien avancer.",
+ "Se reposer n'est pas mériter. C'est entretenir l'outil.",
+ "Le meilleur moment pour reprendre, c'est maintenant, pas lundi.",
+ "Les grosses semaines se gagnent le dimanche soir, pas le mardi matin.",
+ "Si tu ne sais pas par où commencer, commence par le plus court.",
+ "Tu as déjà traversé des périodes pires. Avec moins d'outils qu'aujourd'hui."
+];
+function msgDuJour(dec){
+  const base = Math.floor(Date.parse(TODAY()) / 864e5);
+  return MSG[(base + (dec||0)) % MSG.length];
+}
+let msgDec = 0;
+
+/* ============ catégories ============ */
+const CATS = ["Courses","Restaurant","Transport","Maison","Perso","Pro","Loisirs","Divers"];
+const CATSOMBRE = {Courses:"#9184d9",Restaurant:"#E8734A",Transport:"#7FB2E8",Maison:"#7FD8A8",
+  Perso:"#E8C24A",Pro:"#B4A9F0",Loisirs:"#D98AC8",Divers:"#8B8FA8"};
+const CATCLAIR  = {Courses:"#6C5CC7",Restaurant:"#C6552C",Transport:"#3C7FBF",Maison:"#2E9468",
+  Perso:"#A8791B",Pro:"#7A67D0",Loisirs:"#B04A96",Divers:"#71748C"};
+const catCol = c => ((S.theme === "clair" ? CATCLAIR : CATSOMBRE)[c] || (S.theme === "clair" ? "#6C5CC7" : "#9184d9"));
+
+/* ============ helpers dom ============ */
+const $ = s => document.querySelector(s);
+const el = (h) => { const d = document.createElement("div"); d.innerHTML = h.trim(); return d.firstElementChild; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const CHECK = '<svg viewBox="0 0 24 24" fill="none" style="stroke:var(--ok)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5 11-11"/></svg>';
+const STAR = on => '<svg viewBox="0 0 24 24" style="fill:' + (on ? "var(--lav2)" : "none") + ';stroke:' + (on ? "var(--lav2)" : "var(--mut)") + '" stroke-width="1.7" stroke-linejoin="round"><path d="M12 3.5l2.6 5.5 6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8l6-.8z"/></svg>';
+
+/* ============ rendu : jour ============ */
+function renderJour(){
+  const t = TODAY();
+  $("#hdate").textContent = frDate(t).replace(/^./, c => c.toUpperCase());
+  $("#quote").innerHTML = '<p>' + esc(msgDuJour(msgDec)) + '</p><button class="more" data-act="qMore">Une autre</button>';
+
+  const jour = S.depenses.filter(d => d.d === t).reduce((n,d) => n + d.m, 0);
+  const mois = S.depenses.filter(d => d.d.startsWith(MOIS())).reduce((n,d) => n + d.m, 0);
+  $("#kJour").textContent = eur(jour);
+  $("#kMois").textContent = eur(mois);
+
+  const b = S.budget;
+  const pc = b ? Math.min(100, mois / b * 100) : 0;
+  $("#barBudget").className = "bar" + (b && mois > b ? " hot" : "");
+  $("#barBudget").firstElementChild.style.width = (b ? pc : 0) + "%";
+  $("#txtBudget").innerHTML = b
+    ? (mois > b ? '<span class="hot">Dépassement de ' + eur(mois-b) + " sur un budget de " + eur(b) + ".</span>"
+                : "Il reste " + eur(b - mois) + " sur " + eur(b) + " ce mois-ci.")
+    : 'Aucun budget mensuel défini. <b class="lav" id="setBud" style="cursor:pointer">En fixer un</b>';
+
+  const tj = tachesDuJour();
+  const faites = tj.filter(x => x.fait).length;
+  const habs = S.habitudes.length, habsF = S.habitudes.filter(h => h.faits && h.faits[t]).length;
+  const tot = tj.length + habs, fai = faites + habsF;
+  $("#kTaches").textContent = fai + " / " + tot;
+  $("#barTaches").firstElementChild.style.width = (tot ? fai/tot*100 : 0) + "%";
+  $("#kEpargne").textContent = eur(S.objectifs.reduce((n,o) => n + o.actuel, 0));
+
+  const kmb = $("#kMoisBis"); if (kmb) kmb.textContent = eur(mois);
+
+  const restantes = S.taches.filter(x => x.d === t && !x.fait);
+  $("#tachesJour").innerHTML = restantes.length
+    ? restantes.map(ligneTache).join("")
+    : '<p class="empty">Rien qui traîne pour aujourd\u2019hui.</p>';
+
+  const nrec = S.notes.slice(-3).reverse();
+  $("#notesJour").innerHTML = nrec.length
+    ? nrec.map(n => '<div class="item" data-n="' + n.id + '">' +
+        '<span class="grow sm" style="white-space:pre-wrap">' + esc(n.txt.slice(0,160)) + '</span>' +
+        '<button class="btn mini ghost" data-act="n2t">→ tâche</button></div>').join("")
+    : '<p class="empty">Aucune note pour le moment.</p>';
+
+  const pr = tj.filter(x => x.prio && !x.fait).slice(0,3);
+  $("#prios").innerHTML = pr.length
+    ? pr.map(ligneTache).join("")
+    : '<p class="empty">Aucune priorité posée.<br>Va dans Tâches et étoile ce qui compte vraiment aujourd\u2019hui.</p>';
+
+  $("#habsJour").innerHTML = habs
+    ? S.habitudes.map(h => ligneHabitude(h, t)).join("")
+    : '<p class="empty">Pas d\u2019habitude suivie.<br>Onglet Tâches, bouton Habitude.</p>';
+}
+
+function tachesDuJour(){
+  const t = TODAY();
+  return S.taches.filter(x => x.d === t || (!x.d && x.fait === false && x.epingle));
+}
+
+function ligneTache(x){
+  return '<div class="item' + (x.fait ? " done" : "") + '" data-t="' + x.id + '">' +
+    '<button class="tick' + (x.fait ? " on" : "") + '" data-act="tick">' + CHECK + '</button>' +
+    '<span class="ttxt grow">' + esc(x.txt) + '</span>' +
+    '<button class="star" data-act="prio">' + STAR(!!x.prio) + '</button>' +
+    (x.fait ? "" : '<button class="btn mini ghost" data-act="focus">5 min</button>') +
+    '<button class="x" data-act="del">&times;</button></div>';
+}
+
+function ligneHabitude(h, t){
+  const on = !!(h.faits && h.faits[t]);
+  const serie = serieHabitude(h);
+  return '<div class="item' + (on ? " done" : "") + '" data-h="' + h.id + '">' +
+    '<button class="tick' + (on ? " on" : "") + '" data-act="htick">' + CHECK + '</button>' +
+    '<span class="ttxt grow">' + esc(h.txt) + '</span>' +
+    '<span class="sm mut mono">' + (serie > 1 ? serie + " j" : "") + '</span>' +
+    '<button class="x" data-act="hdel">&times;</button></div>';
+}
+
+function serieHabitude(h){
+  let n = 0; const d = new Date();
+  for (let i = 0; i < 400; i++) {
+    if (h.faits && h.faits[iso(d)]) n++;
+    else if (i > 0) break;
+    d.setDate(d.getDate()-1);
+  }
+  return n;
+}
+
+/* ============ rendu : argent ============ */
+function renderArgent(){
+  $("#dCat").innerHTML = CATS.map(c => '<option>' + c + '</option>').join("");
+  const m = MOIS();
+  const dm = S.depenses.filter(d => d.d.startsWith(m));
+  const tot = dm.reduce((n,d) => n + d.m, 0);
+  const jours = new Date().getDate();
+  $("#moisNom").textContent = new Date().toLocaleDateString("fr-FR",{month:"long", year:"numeric"});
+  $("#aMois").textContent = eur(tot);
+  $("#aMoy").textContent = eur(tot / jours);
+
+  const b = S.budget;
+  $("#aBar").className = "bar" + (b && tot > b ? " hot" : "");
+  $("#aBar").firstElementChild.style.width = (b ? Math.min(100, tot/b*100) : 0) + "%";
+  const proj = tot / jours * 30;
+  $("#aTxt").innerHTML = (b ? "Budget " + eur(b) + " · " : "") +
+    "à ce rythme, le mois finira autour de <b class=\"lav mono\">" + eur(proj) + "</b>.";
+
+  const parCat = {};
+  dm.forEach(d => parCat[d.cat] = (parCat[d.cat] || 0) + d.m);
+  const ordre = Object.keys(parCat).sort((a,b2) => parCat[b2] - parCat[a]);
+  $("#aCats").innerHTML = ordre.length ? ordre.map(c => {
+    const pc = tot ? parCat[c]/tot*100 : 0;
+    return '<div class="catrow"><span class="nm trunc">' + c + '</span>' +
+      '<span class="bar"><i style="width:' + pc + '%;background:' + catCol(c) + '"></i></span>' +
+      '<span class="vl mono">' + eur(parCat[c]) + '</span></div>';
+  }).join("") : "";
+
+  const derniers = S.depenses.slice().sort((a,b3) => (b3.d + b3.id).localeCompare(a.d + a.id)).slice(0,40);
+  $("#aListe").innerHTML = derniers.length ? derniers.map(d =>
+    '<div class="item" data-d="' + d.id + '">' +
+      '<span class="grow"><span class="ttxt trunc" style="display:block">' + esc(d.lib || d.cat) + '</span>' +
+      '<span class="sm mut">' + d.cat + " · " + frDate(d.d).replace(/^\S+\s/,"") + '</span></span>' +
+      '<span class="mono mid">' + eur(d.m) + '</span>' +
+      '<button class="x" data-act="ddel">&times;</button></div>').join("")
+    : '<p class="empty">Rien pour l\u2019instant.<br>Note la première dépense, même 2 €.</p>';
+}
+
+/* ============ rendu : épargne ============ */
+function renderEpargne(){
+  const tot = S.objectifs.reduce((n,o) => n + o.actuel, 0);
+  const cible = S.objectifs.reduce((n,o) => n + o.cible, 0);
+  $("#eTotal").textContent = eur(tot);
+  $("#eSous").textContent = cible ? "sur " + eur(cible) + " visés, tous objectifs confondus." : "Crée un objectif pour commencer.";
+  $("#eObjs").innerHTML = S.objectifs.length ? S.objectifs.map(o => {
+    const pc = o.cible ? Math.min(100, o.actuel/o.cible*100) : 0;
+    const reste = Math.max(0, o.cible - o.actuel);
+    return '<div class="card" data-o="' + o.id + '">' +
+      '<div class="row"><span class="grow"><span class="mid trunc" style="display:block">' + esc(o.nom) + '</span>' +
+      '<span class="sm mut">' + (reste ? "Il reste " + eur(reste) : "Objectif atteint") + '</span></span>' +
+      '<span class="mono mid ok">' + eur(o.actuel) + '</span>' +
+      '<button class="x" data-act="odel">&times;</button></div>' +
+      '<div class="bar ok"><i style="width:' + pc + '%"></i></div>' +
+      '<div class="frow" style="margin:12px 0 0">' +
+      '<input class="field mono grow" type="number" inputmode="decimal" placeholder="Montant" data-in="' + o.id + '">' +
+      '<button class="btn mini" data-act="oadd">Mettre de côté</button>' +
+      '<button class="btn mini ghost" data-act="osub">Retirer</button></div></div>';
+  }).join("") : '<div class="card"><p class="empty">Aucun objectif.<br>Même 20 € par mois, ça compte.</p></div>';
+}
+
+/* ============ rendu : tâches ============ */
+let quand = "jour";
+function renderTaches(){
+  const t = TODAY();
+  const jour = S.taches.filter(x => x.d === t && !x.fait);
+  const fait = S.taches.filter(x => x.d === t && x.fait);
+  const libre = S.taches.filter(x => !x.d && !x.fait);
+  $("#tJour").innerHTML  = jour.length  ? jour.map(ligneTache).join("")  : '<p class="empty">Rien pour aujourd\u2019hui.</p>';
+  $("#tFait").innerHTML  = fait.length  ? fait.map(ligneTache).join("")  : '<p class="empty">Rien de coché… encore.</p>';
+  $("#tLibre").innerHTML = libre.length ? libre.map(ligneTache).join("") : '<p class="empty">Liste vide. C\u2019est une bonne nouvelle.</p>';
+  $("#tHabs").innerHTML  = S.habitudes.length ? S.habitudes.map(h => ligneHabitude(h, t)).join("")
+    : '<p class="empty">Une habitude = une action courte, tous les jours.</p>';
+}
+
+/* ============ rendu : notes ============ */
+function renderNotes(){
+  $("#nListe").innerHTML = S.notes.length ? S.notes.slice().reverse().map(n =>
+    '<div class="card" data-n="' + n.id + '">' +
+      '<div class="row" style="align-items:flex-start"><span class="grow" style="white-space:pre-wrap">' + esc(n.txt) + '</span>' +
+      '<button class="x" data-act="ndel">&times;</button></div>' +
+      '<div class="row" style="margin-top:11px"><span class="sm mut grow">' + frDate(n.d).replace(/^\S+\s/,"") + '</span>' +
+      '<button class="btn mini ghost" data-act="n2t">En faire une tâche</button></div></div>').join("")
+    : '<div class="card"><p class="empty">Aucune note.<br>La capture rapide de l\u2019onglet Jour arrive ici.</p></div>';
+}
+
+/* ============ rendu : agenda ============ */
+function renderAgenda(){
+  const t = TODAY();
+  const limite = new Date(); limite.setDate(limite.getDate()+14);
+  const lim = iso(limite);
+  const ev = S.events.slice().sort((a,b) => (a.d + (a.h||"")).localeCompare(b.d + (b.h||"")));
+  const futur = ev.filter(e => e.d >= t && e.d <= lim);
+  const vieux = ev.filter(e => e.d < t).reverse().slice(0,12);
+
+  const groupes = {};
+  futur.forEach(e => (groupes[e.d] = groupes[e.d] || []).push(e));
+  const jours = Object.keys(groupes);
+  $("#gListe").innerHTML = jours.length ? jours.map(d =>
+    '<div class="card"><div class="xs" style="color:' + (d === t ? "var(--lav2)" : "var(--mut)") + '">' +
+      (d === t ? "Aujourd\u2019hui · " : "") + frDate(d) + '</div>' +
+      groupes[d].map(e => '<div class="item" data-e="' + e.id + '">' +
+        '<span class="mono lav" style="flex:0 0 52px">' + (e.h || "—") + '</span>' +
+        '<span class="ttxt grow trunc">' + esc(e.txt) + '</span>' +
+        '<button class="x" data-act="edel">&times;</button></div>').join("") +
+    '</div>').join("")
+    : '<div class="card"><p class="empty">Rien de prévu sur 14 jours.</p></div>';
+  $("#gVieux").innerHTML = vieux.length ? vieux.map(e =>
+    '<div class="item" data-e="' + e.id + '"><span class="sm mut" style="flex:0 0 92px">' + e.d.split("-").reverse().slice(0,2).join("/") + '</span>' +
+    '<span class="ttxt grow trunc mut">' + esc(e.txt) + '</span>' +
+    '<button class="x" data-act="edel">&times;</button></div>').join("")
+    : '<p class="empty">Rien derrière.</p>';
+}
+
+/* ============ calendrier ============ */
+let calMois = TODAY().slice(0,7);
+let jourSel = TODAY();
+const JOURS_L = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
+
+function renderCal(){
+  const n = $("#cal"); if (!n) return;
+  const [an, mo] = calMois.split("-").map(Number);
+  const premier = new Date(an, mo-1, 1);
+  const nbJours = new Date(an, mo, 0).getDate();
+  const decal = (premier.getDay() + 6) % 7;                 // semaine qui démarre lundi
+  const t = TODAY();
+
+  const parJour = {};
+  S.events.forEach(e => { if (e.d.startsWith(calMois)) (parJour[e.d] = parJour[e.d] || []).push(e); });
+  const depJour = {};
+  S.depenses.forEach(d => { if (d.d.startsWith(calMois)) depJour[d.d] = (depJour[d.d] || 0) + d.m; });
+
+  let cases = "";
+  const avant = new Date(an, mo-1, 0).getDate();
+  for (let i = decal; i > 0; i--) cases += '<button class="cc hors" disabled><span class="n">' + (avant - i + 1) + '</span></button>';
+  for (let j = 1; j <= nbJours; j++) {
+    const d = calMois + "-" + pad(j);
+    const ev = parJour[d] || [], dep = depJour[d];
+    const pts = ev.slice(0,3).map(() => '<span class="pt"></span>').join("") + (dep ? '<span class="pt dep"></span>' : "");
+    cases += '<button class="cc mois' + (d === t ? " auj" : "") + (d === jourSel ? " sel" : "") + '" data-j="' + d + '">' +
+      '<span class="n">' + j + '</span><span class="pts">' + pts + '</span></button>';
+  }
+  const reste = (7 - ((decal + nbJours) % 7)) % 7;
+  for (let i = 1; i <= reste; i++) cases += '<button class="cc hors" disabled><span class="n">' + i + '</span></button>';
+
+  n.innerHTML = '<div class="calhead">' +
+      '<button class="calnav" data-cal="-1">\u2039</button>' +
+      '<span class="m">' + premier.toLocaleDateString("fr-FR",{month:"long", year:"numeric"}) + '</span>' +
+      '<button class="calnav" data-cal="+1">\u203a</button></div>' +
+    '<div class="cgrid">' + JOURS_L.map(x => '<span class="cd">' + x + '</span>').join("") + cases + '</div>' +
+    '<div class="row" style="margin-top:13px;gap:14px">' +
+      '<span class="sm mut"><span class="pt" style="display:inline-block;margin-right:6px"></span>rendez-vous</span>' +
+      '<span class="sm mut"><span class="pt dep" style="display:inline-block;margin-right:6px"></span>dépense</span>' +
+      '<button class="btn mini ghost" data-cal="auj" style="margin-left:auto">Aujourd\u2019hui</button></div>';
+  renderJourSel();
+}
+
+function renderJourSel(){
+  const n = $("#gJour"); if (!n) return;
+  const lab = $("#kJourSel");
+  if (lab) lab.textContent = (jourSel === TODAY() ? "Aujourd\u2019hui \u00b7 " : "") + frDate(jourSel);
+  const ev = S.events.filter(e => e.d === jourSel).sort((a,b) => (a.h||"").localeCompare(b.h||""));
+  const dep = S.depenses.filter(d => d.d === jourSel);
+  const tot = dep.reduce((s,d) => s + d.m, 0);
+  n.innerHTML =
+    (ev.length ? ev.map(e => '<div class="item" data-e="' + e.id + '">' +
+        '<span class="mono lav" style="flex:0 0 52px">' + (e.h || "\u2014") + '</span>' +
+        '<span class="ttxt grow trunc">' + esc(e.txt) + '</span>' +
+        '<button class="x" data-act="edel">&times;</button></div>').join("")
+      : '<p class="empty" style="padding:14px 8px">Rien de pr\u00e9vu ce jour-l\u00e0.</p>') +
+    (dep.length ? '<div class="item"><span class="grow sm mut">' + dep.length + ' d\u00e9pense' + (dep.length>1?"s":"") +
+        '</span><span class="mono">' + eur(tot) + '</span></div>' : "") +
+    '<button class="btn mini" data-cal="add" style="margin-top:12px">Ajouter \u00e0 ce jour</button>';
+}
+
+document.addEventListener("click", e => {
+  const c = e.target.closest("[data-cal]");
+  if (c) {
+    const v = c.dataset.cal;
+    if (v === "auj") { calMois = TODAY().slice(0,7); jourSel = TODAY(); return renderCal(); }
+    if (v === "add") { $("#gDate").value = jourSel; $("#gTxt").focus();
+      $("#gTxt").scrollIntoView({block:"center"}); return; }
+    const [a, m] = calMois.split("-").map(Number);
+    const d = new Date(a, m - 1 + (v === "+1" ? 1 : -1), 1);
+    calMois = d.getFullYear() + "-" + pad(d.getMonth()+1);
+    return renderCal();
+  }
+  const j = e.target.closest("[data-j]");
+  if (j) { jourSel = j.dataset.j; renderCal(); }
+});
+
+/* ============ rendu global ============ */
+function render(){
+  renderJour(); renderArgent(); renderEpargne(); renderTaches(); renderNotes(); renderAgenda();
+  renderCal();
+  if (typeof renderMeteo === "function") renderMeteo();
+}
+
+/* ============ navigation ============ */
+document.querySelector("nav").addEventListener("click", e => {
+  const b = e.target.closest(".nb"); if (!b) return;
+  document.querySelectorAll(".nb").forEach(x => x.classList.toggle("on", x === b));
+  document.querySelectorAll(".view").forEach(v => v.classList.toggle("on", v.id === "v-" + b.dataset.v));
+  scrollTo({top:0, behavior:"auto"});
+});
+
+/* ============ ajouts ============ */
+function addDepense(){
+  const m = parseFloat(String($("#dMontant").value).replace(",","."));
+  if (!(m > 0)) return;
+  S.depenses.push({ id:uid(), d:TODAY(), m:m, lib:$("#dLib").value.trim(), cat:$("#dCat").value || "Divers" });
+  $("#dMontant").value = ""; $("#dLib").value = "";
+  save(); render();
+}
+$("#dGo").addEventListener("click", addDepense);
+$("#dLib").addEventListener("keydown", e => { if (e.key === "Enter") addDepense(); });
+
+function addTache(txt, q){
+  txt = (txt || "").trim(); if (!txt) return;
+  if (q === "hab") S.habitudes.push({ id:uid(), txt:txt, faits:{} });
+  else S.taches.push({ id:uid(), txt:txt, fait:false, prio:false,
+    d: q === "jour" ? TODAY() : q === "demain" ? DEMAIN() : null });
+  save(); render();
+}
+$("#tGo").addEventListener("click", () => { addTache($("#tTxt").value, quand); $("#tTxt").value = ""; });
+$("#tTxt").addEventListener("keydown", e => { if (e.key === "Enter") { addTache($("#tTxt").value, quand); $("#tTxt").value = ""; } });
+document.querySelectorAll("[data-quand]").forEach(c => c.addEventListener("click", () => {
+  quand = c.dataset.quand;
+  document.querySelectorAll("[data-quand]").forEach(x => x.classList.toggle("on", x === c));
+}));
+
+$("#qcapGo").addEventListener("click", () => {
+  const v = $("#qcap").value.trim(); if (!v) return;
+  S.notes.push({ id:uid(), txt:v, d:TODAY() }); $("#qcap").value = "";
+  save(); render();
+});
+$("#qcap").addEventListener("keydown", e => { if (e.key === "Enter") $("#qcapGo").click(); });
+
+$("#nGo").addEventListener("click", () => {
+  const v = $("#nTxt").value.trim(); if (!v) return;
+  S.notes.push({ id:uid(), txt:v, d:TODAY() }); $("#nTxt").value = "";
+  save(); render();
+});
+
+$("#eGo").addEventListener("click", () => {
+  const nom = $("#eNom").value.trim();
+  const cible = parseFloat(String($("#eCible").value).replace(",","."));
+  if (!nom) return;
+  S.objectifs.push({ id:uid(), nom:nom, cible: cible > 0 ? cible : 0, actuel:0 });
+  $("#eNom").value = ""; $("#eCible").value = "";
+  save(); render();
+});
+
+$("#gGo").addEventListener("click", () => {
+  const txt = $("#gTxt").value.trim(), d = $("#gDate").value;
+  if (!txt || !d) return;
+  S.events.push({ id:uid(), d:d, h:$("#gHeure").value || "", txt:txt });
+  $("#gTxt").value = ""; $("#gHeure").value = "";
+  save(); render();
+});
+
+/* ============ actions déléguées ============ */
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  const act = b.dataset.act;
+  const row = b.closest("[data-t],[data-h],[data-d],[data-o],[data-n],[data-e]");
+
+  if (act === "qMore") { msgDec++; renderJour(); return; }
+
+  if (row && row.dataset.t) {
+    const x = S.taches.find(y => y.id === row.dataset.t); if (!x) return;
+    if (act === "tick") { x.fait = !x.fait; if (x.fait && !x.d) x.d = TODAY(); }
+    if (act === "prio") x.prio = !x.prio;
+    if (act === "del")  S.taches = S.taches.filter(y => y.id !== x.id);
+    if (act === "focus") return ouvrirFocus(x);
+    save(); render(); return;
+  }
+  if (row && row.dataset.h) {
+    const h = S.habitudes.find(y => y.id === row.dataset.h); if (!h) return;
+    if (act === "htick") { h.faits = h.faits || {}; const t = TODAY();
+      if (h.faits[t]) delete h.faits[t]; else h.faits[t] = 1; }
+    if (act === "hdel") S.habitudes = S.habitudes.filter(y => y.id !== h.id);
+    save(); render(); return;
+  }
+  if (row && row.dataset.d && act === "ddel") {
+    S.depenses = S.depenses.filter(y => y.id !== row.dataset.d); save(); render(); return;
+  }
+  if (row && row.dataset.o) {
+    const o = S.objectifs.find(y => y.id === row.dataset.o); if (!o) return;
+    if (act === "odel") { S.objectifs = S.objectifs.filter(y => y.id !== o.id); save(); render(); return; }
+    const inp = row.querySelector('[data-in="' + o.id + '"]');
+    const v = parseFloat(String(inp.value).replace(",","."));
+    if (!(v > 0)) return;
+    o.actuel = Math.max(0, o.actuel + (act === "osub" ? -v : v));
+    inp.value = ""; save(); render(); return;
+  }
+  if (row && row.dataset.n) {
+    const n = S.notes.find(y => y.id === row.dataset.n); if (!n) return;
+    if (act === "ndel") S.notes = S.notes.filter(y => y.id !== n.id);
+    if (act === "n2t") { S.taches.push({ id:uid(), txt:n.txt.slice(0,120), fait:false, prio:false, d:TODAY() });
+      S.notes = S.notes.filter(y => y.id !== n.id); }
+    save(); render(); return;
+  }
+  if (row && row.dataset.e && act === "edel") {
+    S.events = S.events.filter(y => y.id !== row.dataset.e); save(); render(); return;
+  }
+});
+
+/* budget cliquable */
+document.addEventListener("click", e => {
+  if (e.target.id !== "setBud") return;
+  const v = prompt("Budget de dépenses pour le mois, en euros :", S.budget || "");
+  if (v === null) return;
+  const n = parseFloat(String(v).replace(",","."));
+  S.budget = n > 0 ? n : null; save(); render();
+});
+
+/* ============ focus ============ */
+let fTimer = null, fReste = 0, fTache = null, fTotal = 300;
+function ouvrirFocus(x, secondes){
+  fTache = x; fTotal = secondes || 300; fReste = fTotal;
+  $("#fTxt").textContent = x.txt;
+  $("#focus").classList.add("on");
+  majFocus(); lancerFocus();
+}
+function majFocus(){
+  $("#fTime").textContent = pad(Math.floor(fReste/60)) + ":" + pad(fReste % 60);
+  $("#fArc").style.strokeDashoffset = 283 * (1 - fReste / fTotal);
+}
+function lancerFocus(){
+  clearInterval(fTimer);
+  $("#fPause").textContent = "Pause";
+  fTimer = setInterval(() => {
+    fReste--; majFocus();
+    if (fReste <= 0) { clearInterval(fTimer); fTimer = null;
+      $("#fTime").textContent = "00:00"; $("#fPause").textContent = "Relancer";
+      if (navigator.vibrate) navigator.vibrate([200,100,200]); }
+  }, 1000);
+}
+$("#fPause").addEventListener("click", () => {
+  if (fTimer) { clearInterval(fTimer); fTimer = null; $("#fPause").textContent = "Reprendre"; }
+  else { if (fReste <= 0) fReste = fTotal; lancerFocus(); }
+});
+$("#fQuit").addEventListener("click", () => { clearInterval(fTimer); fTimer = null; $("#focus").classList.remove("on"); });
+$("#fDone").addEventListener("click", () => {
+  clearInterval(fTimer); fTimer = null;
+  if (fTache) { const x = S.taches.find(y => y.id === fTache.id); if (x) { x.fait = true; if (!x.d) x.d = TODAY(); } }
+  save(); render(); $("#focus").classList.remove("on");
+});
+
+/* ============ menu ============ */
+const sheet = $("#sheet"), sbox = $("#sbox");
+$("#btnMenu").addEventListener("click", () => {
+  const t = TODAY();
+  const enRetard = S.taches.filter(x => !x.fait && x.d && x.d < t).length;
+  sbox.innerHTML = "<h3>Réglages</h3>" +
+    '<div class="card tight"><div class="row"><span class="grow">Budget mensuel</span>' +
+      '<span class="mono lav">' + (S.budget ? eur(S.budget) : "aucun") + '</span></div>' +
+      '<button class="btn mini ghost" style="margin-top:11px" data-m="bud">Modifier</button></div>' +
+    (enRetard ? '<div class="card tight"><div class="row"><span class="grow">' + enRetard +
+      ' tâche' + (enRetard>1?"s":"") + ' des jours passés</span></div>' +
+      '<p class="sm mut" style="margin:8px 0 0">Les ramener à aujourd\u2019hui, sans culpabilité.</p>' +
+      '<button class="btn mini" style="margin-top:11px" data-m="report">Tout ramener à aujourd\u2019hui</button></div>' : "") +
+    '<div class="card tight"><div class="row"><span class="grow">Rappels</span>' +
+      '<span class="sm ' + (S.notif.on ? "ok" : "mut") + '">' + (S.notif.on ? "actifs" : "coupés") + '</span></div>' +
+      '<p class="sm mut" style="margin:8px 0 0">Rappel du matin à ' + S.notif.heure +
+      ', et alerte ' + S.notif.avant + ' min avant un rendez-vous — quand l\u2019app est ouverte ou en arrière-plan.</p>' +
+      '<div class="frow" style="margin:11px 0 0"><button class="btn mini" data-m="notif">' +
+      (S.notif.on ? "Tester" : "Activer") + '</button>' +
+      '<button class="btn mini ghost" data-m="heure">Heure</button>' +
+      (S.notif.on ? '<button class="btn mini ghost" data-m="notifoff">Couper</button>' : "") + '</div></div>' +
+    '<div class="card tight"><div class="row"><span class="grow">Sauvegarde</span></div>' +
+      '<p class="sm mut" style="margin:8px 0 0">Tout est stocké dans ce téléphone. Exporte de temps en temps.</p>' +
+      '<div class="frow" style="margin:11px 0 0"><button class="btn mini ghost" data-m="exp">Exporter</button>' +
+      '<button class="btn mini ghost" data-m="imp">Importer</button></div></div>' +
+    '<div class="card tight"><button class="btn mini danger" data-m="raz">Tout effacer</button></div>' +
+    '<button class="btn ghost" style="width:100%;margin-top:6px" data-m="close">Fermer</button>';
+  sheet.classList.add("on");
+});
+sheet.addEventListener("click", e => {
+  if (e.target === sheet) return sheet.classList.remove("on");
+  const b = e.target.closest("[data-m]"); if (!b) return;
+  const m = b.dataset.m;
+  if (m === "close") sheet.classList.remove("on");
+  if (m === "bud") { sheet.classList.remove("on");
+    const v = prompt("Budget de dépenses pour le mois, en euros :", S.budget || "");
+    if (v !== null) { const n = parseFloat(String(v).replace(",",".")); S.budget = n > 0 ? n : null; save(); render(); } }
+  if (m === "report") { const t = TODAY();
+    S.taches.forEach(x => { if (!x.fait && x.d && x.d < t) x.d = t; });
+    save(); render(); sheet.classList.remove("on"); }
+  if (m === "notif") { sheet.classList.remove("on");
+    if (S.notif.on) notifier("Test", "Si tu vois ça, tout marche."); else demanderNotif(); }
+  if (m === "notifoff") { S.notif.on = false; save(); sheet.classList.remove("on"); }
+  if (m === "heure") { sheet.classList.remove("on");
+    const v = prompt("Heure du rappel du matin (HH:MM) :", S.notif.heure);
+    if (v && /^\d{1,2}:\d{2}$/.test(v)) { S.notif.heure = pad(+v.split(":")[0]) + ":" + v.split(":")[1]; save(); } }
+  if (m === "exp") {
+    const blob = new Blob([JSON.stringify(S, null, 1)], {type:"application/json"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "pyros-quotidien-" + TODAY() + ".json";
+    a.click(); URL.revokeObjectURL(a.href);
+  }
+  if (m === "imp") {
+    const inp = document.createElement("input"); inp.type = "file"; inp.accept = ".json,application/json";
+    inp.onchange = () => { const f = inp.files[0]; if (!f) return;
+      const r = new FileReader();
+      r.onload = () => { try { const o = JSON.parse(r.result);
+        if (!o || typeof o !== "object") throw 0;
+        S = Object.assign(JSON.parse(JSON.stringify(DEF)), o); save(); render();
+        sheet.classList.remove("on"); } catch(err) { alert("Fichier illisible."); } };
+      r.readAsText(f); };
+    inp.click();
+  }
+  if (m === "raz") {
+    if (confirm("Tout effacer définitivement ? Pense à exporter avant.")) {
+      S = JSON.parse(JSON.stringify(DEF)); save(); render(); sheet.classList.remove("on"); }
+  }
+});
+
+
+/* ============ météo (Open-Meteo, sans clé) ============ */
+S.meteo = S.meteo || { lat:null, lon:null, ville:"", cache:null, t:0 };
+const WMO = {
+  0:["Ciel dégagé","soleil"], 1:["Peu nuageux","soleil"], 2:["Partiellement nuageux","nuage"], 3:["Couvert","nuage"],
+  45:["Brouillard","brume"], 48:["Brouillard givrant","brume"],
+  51:["Bruine légère","pluie"], 53:["Bruine","pluie"], 55:["Bruine forte","pluie"],
+  56:["Bruine verglaçante","pluie"], 57:["Bruine verglaçante","pluie"],
+  61:["Pluie faible","pluie"], 63:["Pluie","pluie"], 65:["Forte pluie","pluie"],
+  66:["Pluie verglaçante","pluie"], 67:["Pluie verglaçante","pluie"],
+  71:["Neige faible","neige"], 73:["Neige","neige"], 75:["Forte neige","neige"], 77:["Grains de neige","neige"],
+  80:["Averses","pluie"], 81:["Averses","pluie"], 82:["Fortes averses","pluie"],
+  85:["Averses de neige","neige"], 86:["Averses de neige","neige"],
+  95:["Orage","orage"], 96:["Orage et grêle","orage"], 99:["Orage et grêle","orage"]
+};
+const GLYPHE = {
+  soleil:'<circle cx="12" cy="12" r="4.6"/><path d="M12 2.4v2.2M12 19.4v2.2M2.4 12h2.2M19.4 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"/>',
+  nuage:'<path d="M7.5 18h9.2a3.8 3.8 0 0 0 .4-7.6A5.6 5.6 0 0 0 6.6 11 3.5 3.5 0 0 0 7.5 18z"/>',
+  brume:'<path d="M7 13.5h9.5a3.4 3.4 0 0 0 .3-6.8A5 5 0 0 0 6.2 7.3 3.1 3.1 0 0 0 7 13.5z"/><path d="M4.5 17h15M7 20.5h11"/>',
+  pluie:'<path d="M7.5 15h9.2a3.8 3.8 0 0 0 .4-7.6A5.6 5.6 0 0 0 6.6 8 3.5 3.5 0 0 0 7.5 15z"/><path d="M9 18l-1 2.6M13 18l-1 2.6M17 18l-1 2.6"/>',
+  neige:'<path d="M7.5 14.5h9.2a3.8 3.8 0 0 0 .4-7.6A5.6 5.6 0 0 0 6.6 7.5 3.5 3.5 0 0 0 7.5 14.5z"/><path d="M9 18.4h.01M12.5 20.4h.01M16 18.4h.01"/>',
+  orage:'<path d="M7.5 14.2h9.2a3.8 3.8 0 0 0 .4-7.6A5.6 5.6 0 0 0 6.6 7.2 3.5 3.5 0 0 0 7.5 14.2z"/><path d="M13 16.2l-3 3.4h3l-1.4 2.6"/>'
+};
+const ico = (code, taille) => '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke-width="1.6" ' +
+  'stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--lav2)' + (taille ? ';width:' + taille + 'px;height:' + taille + 'px"' : '"') +
+  '>' + (GLYPHE[(WMO[code] || ["", "nuage"])[1]] || GLYPHE.nuage) + '</svg>';
+const libelle = code => (WMO[code] || ["Temps variable"])[0];
+
+function etatMeteo(titre, sous){
+  return '<div class="row" data-act="meteoretry" style="cursor:pointer">' +
+    '<span class="grow"><span class="xs">M\u00e9t\u00e9o</span>' +
+    '<div class="mid" style="margin-top:4px">' + titre + '</div>' +
+    '<div class="sm mut">' + sous + '</div></span>' +
+    '<button class="btn mini ghost" data-act="meteoretry">R\u00e9essayer</button></div>';
+}
+
+function meteoHTML(){
+  const m = S.meteo, d = m.cache;
+  if (m.etat === "reseau" && !d) return etatMeteo("\u26a0 r\u00e9seau", "Pas de connexion pour l\u2019instant.");
+  if (m.etat === "http"   && !d) return etatMeteo("\u26a0 service", "Le service m\u00e9t\u00e9o ne r\u00e9pond pas.");
+  if (m.etat === "charge" && !d) return etatMeteo("\u26c5 \u2026", "Relev\u00e9 en cours.");
+  if (!m.lat) {
+    return '<div class="row"><span class="grow"><span class="xs">Météo</span>' +
+      '<div class="sm mut" style="margin-top:5px">Pas encore de lieu.</div></span>' +
+      '<button class="btn mini" data-act="geoloc">Me localiser</button>' +
+      '<button class="btn mini ghost" data-act="geoville">Ville</button></div>';
+  }
+  if (!d) {
+    return '<div class="row"><span class="grow"><span class="xs">' + esc(m.ville || "Météo") + '</span>' +
+      '<div class="sm mut" style="margin-top:5px">Chargement…</div></span>' +
+      '<button class="btn mini ghost" data-act="geoville">Changer</button></div>';
+  }
+  const c = d.current || {}, j = d.daily || {};
+  if (typeof c.temperature_2m !== "number" || !j.time) {
+    return etatMeteo("\u26a0 donn\u00e9es illisibles", "Toucher pour recharger.");
+  }
+  const vieux = Date.now() - m.t > 3 * 36e5;
+  const jours = (j.time || []).slice(0, 5).map((dt, i) => {
+    if (!j.weather_code || !j.temperature_2m_max) return "";
+    const lab = i === 0 ? "Auj." : new Date(dt).toLocaleDateString("fr-FR", { weekday:"short" }).replace(".","");
+    return '<div class="jr"><div class="d">' + lab + '</div>' + ico(j.weather_code[i], 26) +
+      '<div class="t mono">' + Math.round(j.temperature_2m_max[i]) + '° <span>' + Math.round(j.temperature_2m_min[i]) + '°</span></div></div>';
+  }).join("");
+  const pluie = (j.precipitation_probability_max || [])[0];
+  return '<div class="meteo">' + ico(c.weather_code) +
+    '<div class="grow"><div class="tp mono">' + Math.round(c.temperature_2m) + '°</div>' +
+    '<div class="lb">' + libelle(c.weather_code) + '</div>' +
+    '<div class="vl">' + esc(m.ville || "") + (vieux ? " · données un peu anciennes" : "") + '</div></div>' +
+    '<div class="mm">' + (pluie != null ? "pluie <b>" + pluie + "%</b><br>" : "") +
+      "vent <b>" + Math.round(c.wind_speed_10m || 0) + "</b> km/h" +
+      (j.sunset ? "<br>coucher <b>" + (j.sunset[0] || "").slice(11,16) + "</b>" : "") + '</div></div>' +
+    '<div class="jours">' + jours + '</div>' +
+    '<div class="row" style="margin-top:13px"><span class="sm mut grow">' + conseilMeteo(c, j) + '</span>' +
+    '<button class="btn mini ghost" data-act="geoville">Lieu</button></div>';
+}
+
+function conseilMeteo(c, j){
+  const p = (j.precipitation_probability_max || [])[0] || 0;
+  const t = c.temperature_2m;
+  if (p >= 60) return "Forte proba de pluie : prévois le repli si tu tournes dehors.";
+  if (t >= 28) return "Grosse chaleur : attention aux produits frais dans la voiture.";
+  if (t <= 2)  return "Il gèle ou presque : prévois large sur les trajets.";
+  if (p >= 30) return "Averses possibles dans la journée.";
+  return "Journée sans contrainte météo particulière.";
+}
+
+async function chargerMeteo(force){
+  const m = S.meteo;
+  if (!m.lat) return renderMeteo();
+  if (!force && m.cache && Date.now() - m.t < 30 * 60000) return renderMeteo();
+  m.etat = "charge"; renderMeteo();
+  try {
+    const u = "https://api.open-meteo.com/v1/forecast?latitude=" + m.lat + "&longitude=" + m.lon +
+      "&current=temperature_2m,weather_code,wind_speed_10m" +
+      "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunset" +
+      "&timezone=auto&forecast_days=5";
+    const r = await fetch(u, { cache:"no-store" });
+    if (!r.ok) { m.etat = "http"; renderMeteo(); return; }
+    const d = await r.json();
+    if (!d || !d.current) { m.etat = "http"; renderMeteo(); return; }
+    m.cache = { current:d.current, daily:d.daily || {} }; m.t = Date.now(); m.etat = "ok";
+    save();
+  } catch(e) { m.etat = "reseau"; }
+  renderMeteo();
+}
+function renderMeteo(){ const n = $("#cMeteo"); if (n) n.innerHTML = meteoHTML(); }
+
+function localiser(){
+  if (!navigator.geolocation) return alert("Localisation indisponible sur ce navigateur.");
+  navigator.geolocation.getCurrentPosition(async pos => {
+    S.meteo.lat = +pos.coords.latitude.toFixed(3);
+    S.meteo.lon = +pos.coords.longitude.toFixed(3);
+    S.meteo.ville = S.meteo.ville || "Ma position";
+    save(); chargerMeteo(true);
+  }, () => alert("Localisation refusée. Utilise le bouton Ville."), { timeout:8000, maximumAge:6e5 });
+}
+
+async function choisirVille(){
+  const q = prompt("Ville :", S.meteo.ville || "");
+  if (!q) return;
+  try {
+    const r = await fetch("https://geocoding-api.open-meteo.com/v1/search?count=1&language=fr&name=" + encodeURIComponent(q));
+    const d = await r.json();
+    if (!d.results || !d.results.length) return alert("Ville introuvable.");
+    const v = d.results[0];
+    S.meteo.lat = v.latitude; S.meteo.lon = v.longitude; S.meteo.ville = v.name;
+    save(); chargerMeteo(true);
+  } catch(e) { alert("Recherche impossible, vérifie la connexion."); }
+}
+
+/* ============ notifications ============ */
+S.notif = S.notif || { on:false, heure:"08:30", avant:15 };
+let SWREG = null, dejaNotif = {};
+try { dejaNotif = JSON.parse(sessionStorage.getItem("pyros_notif") || "{}"); } catch(e){}
+const notifSave = () => { try { sessionStorage.setItem("pyros_notif", JSON.stringify(dejaNotif)); } catch(e){} };
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw-quotidien.js").then(r => { SWREG = r; }).catch(()=>{});
+}
+
+async function notifier(titre, corps){
+  if (!("Notification" in window) || Notification.permission !== "granted") return false;
+  const opts = { body:corps, icon:"icon-192.png", badge:"icon-192.png", tag:"pyros", vibrate:[120,60,120] };
+  try {
+    const reg = SWREG || (navigator.serviceWorker && await navigator.serviceWorker.getRegistration());
+    if (reg && reg.showNotification) { await reg.showNotification(titre, opts); return true; }
+    new Notification(titre, opts); return true;              // ordi surtout
+  } catch(e) { return false; }
+}
+
+async function demanderNotif(){
+  if (!("Notification" in window)) return alert("Ce navigateur ne gère pas les notifications.");
+  const p = await Notification.requestPermission();
+  S.notif.on = (p === "granted"); save();
+  if (S.notif.on) notifier("PYROS Quotidien", "C'est bon, les rappels sont actifs.");
+  else alert("Autorisation refusée. Tu peux la réactiver dans les réglages du navigateur.");
+}
+
+function verifierRappels(){
+  if (!S.notif.on || !("Notification" in window) || Notification.permission !== "granted") return;
+  const now = new Date(), t = TODAY();
+  const hhmm = pad(now.getHours()) + ":" + pad(now.getMinutes());
+
+  if (hhmm >= S.notif.heure && dejaNotif["jour-" + t] !== 1) {
+    dejaNotif["jour-" + t] = 1; notifSave();
+    const tj = S.taches.filter(x => x.d === t && !x.fait).length;
+    const hb = S.habitudes.filter(h => !(h.faits && h.faits[t])).length;
+    notifier("Ta journée", tj + " tâche" + (tj>1?"s":"") + " et " + hb + " habitude" + (hb>1?"s":"") + " à faire. Commence par la plus courte.");
+  }
+
+  S.events.filter(e => e.d === t && e.h).forEach(e => {
+    const [H,M] = e.h.split(":").map(Number);
+    const diff = (H*60 + M) - (now.getHours()*60 + now.getMinutes());
+    if (diff <= S.notif.avant && diff >= 0 && dejaNotif["ev-" + e.id] !== 1) {
+      dejaNotif["ev-" + e.id] = 1; notifSave();
+      notifier(e.h + " · " + e.txt, "Dans " + diff + " minute" + (diff>1?"s":"") + ".");
+    }
+  });
+}
+
+/* ============ export calendrier (.ics) ============ */
+function icsEchap(s){ return String(s).replace(/([,;\\])/g,"\\$1").replace(/\n/g," "); }
+function icsBloc(e){
+  const [a,m,j] = e.d.split("-");
+  const h = (e.h || "09:00").split(":");
+  const deb = a + m + j + "T" + pad(+h[0]) + pad(+h[1]) + "00";
+  const fin = a + m + j + "T" + pad((+h[0] + 1) % 24) + pad(+h[1]) + "00";
+  return ["BEGIN:VEVENT",
+    "UID:" + e.id + "@pyros",
+    "DTSTAMP:" + new Date().toISOString().replace(/[-:]/g,"").slice(0,15) + "Z",
+    "DTSTART:" + deb, "DTEND:" + fin,
+    "SUMMARY:" + icsEchap(e.txt),
+    "BEGIN:VALARM", "TRIGGER:-PT" + (S.notif.avant || 15) + "M", "ACTION:DISPLAY",
+    "DESCRIPTION:" + icsEchap(e.txt), "END:VALARM",
+    "END:VEVENT"].join("\r\n");
+}
+function exportIcs(liste){
+  if (!liste.length) return alert("Rien à envoyer.");
+  const txt = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//PYROS//Quotidien//FR","CALSCALE:GREGORIAN"]
+    .concat(liste.map(icsBloc)).concat(["END:VCALENDAR"]).join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([txt], { type:"text/calendar" }));
+  a.download = "pyros-agenda.ics"; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  if (b.dataset.act === "geoloc")     return localiser();
+  if (b.dataset.act === "geoville")   return choisirVille();
+  if (b.dataset.act === "meteoretry") return chargerMeteo(true);
+});
+$("#icsAll").addEventListener("click", () => {
+  const t = TODAY();
+  exportIcs(S.events.filter(x => x.d >= t).sort((a,b) => (a.d+a.h).localeCompare(b.d+b.h)));
+});
+
+chargerMeteo();
+setInterval(verifierRappels, 30000);
+verifierRappels();
+document.addEventListener("visibilitychange", () => { if (!document.hidden) { chargerMeteo(); verifierRappels(); } });
+
+document.addEventListener("click", e => {
+  if (e.target.closest("#goTaches")) return document.querySelector('.nb[data-v="taches"]').click();
+  if (e.target.closest("#goNotes"))  return document.querySelector('.nb[data-v="notes"]').click();
+});
+
+/* ============ horloge ============ */
+function tic(){
+  const n = new Date();
+  const e = $("#hheure");
+  if (e) e.textContent = pad(n.getHours()) + ":" + pad(n.getMinutes()) + ":" + pad(n.getSeconds());
+}
+tic(); setInterval(tic, 1000);
+
+/* ============ thème ============ */
+if (typeof S.theme !== "string") S.theme = "clair";
+function appliquerTheme(){
+  document.body.classList.toggle("clair", S.theme === "clair");
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute("content", S.theme === "clair" ? "#F4F4F8" : "#0C0E17");
+  $("#btnTheme").textContent = S.theme === "clair" ? "◑" : "◐";
+}
+$("#btnTheme").addEventListener("click", () => {
+  S.theme = (S.theme === "clair") ? "sombre" : "clair";
+  save(); appliquerTheme(); render();
+});
+appliquerTheme();
+
+/* ============ démarrage ============ */
+$("#gDate").value = TODAY();
+render();
+setInterval(() => { if ($("#hdate").textContent && !fTimer) renderJour(); }, 60000);
+</script>
+</body>
+</html>
