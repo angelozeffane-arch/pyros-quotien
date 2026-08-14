@@ -206,9 +206,23 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--glass);
 .sbox{width:100%;max-width:760px;border-radius:20px 20px 0 0;border:1px solid var(--line2);border-bottom:none;
   background:linear-gradient(160deg,var(--card2),var(--card));padding:22px 18px calc(26px + env(safe-area-inset-bottom,0px));max-height:88vh;overflow:auto}
 .sbox h3{margin:0 0 15px;font-size:17px;font-weight:600}
+
+/* ---- intro flamme (comme PYROS Avengers) ---- */
+@keyframes flipY{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
+#splash{position:fixed;inset:0;z-index:9999;background:radial-gradient(600px 460px at 50% 42%,rgba(145,132,217,.18),transparent 62%),#0f111c;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;transition:opacity .55s ease;perspective:620px}
+#splash.hide{opacity:0;pointer-events:none}
+#splash .sflame{width:78px;height:78px;color:#e7e5fe;animation:flipY 2.3s linear infinite;filter:drop-shadow(0 0 22px rgba(145,132,217,.55))}
+#splash .sname{font-weight:700;font-size:15px;letter-spacing:.34em;text-transform:uppercase;color:#fff;padding-left:.34em}
+#splash .stag{font-size:9px;letter-spacing:.34em;color:#9a94c0;text-transform:uppercase;padding-left:.34em}
+.meteo .ic.wemo,.jr .ic.wemo{display:inline-flex;align-items:center;justify-content:center}
 </style>
 </head>
 <body>
+<div id="splash">
+  <svg class="sflame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <div class="sname">PYROS QUOTIDIEN</div><div class="stag">Ta journée</div>
+</div>
+
 
 <div class="wrap">
   <header>
@@ -1047,7 +1061,7 @@ sheet.addEventListener("click", e => {
 /* ============ météo (Open-Meteo, sans clé) ============ */
 S.meteo = S.meteo || { lat:null, lon:null, ville:"", cache:null, t:0 };
 const WMO = {
-  0:["Ciel dégagé","soleil"], 1:["Peu nuageux","soleil"], 2:["Partiellement nuageux","nuage"], 3:["Couvert","nuage"],
+  0:["Ciel dégagé","soleil"], 1:["Peu nuageux","eclaircie"], 2:["Partiellement nuageux","eclaircie"], 3:["Couvert","nuage"],
   45:["Brouillard","brume"], 48:["Brouillard givrant","brume"],
   51:["Bruine légère","pluie"], 53:["Bruine","pluie"], 55:["Bruine forte","pluie"],
   56:["Bruine verglaçante","pluie"], 57:["Bruine verglaçante","pluie"],
@@ -1066,9 +1080,8 @@ const GLYPHE = {
   neige:'<path d="M7.5 14.5h9.2a3.8 3.8 0 0 0 .4-7.6A5.6 5.6 0 0 0 6.6 7.5 3.5 3.5 0 0 0 7.5 14.5z"/><path d="M9 18.4h.01M12.5 20.4h.01M16 18.4h.01"/>',
   orage:'<path d="M7.5 14.2h9.2a3.8 3.8 0 0 0 .4-7.6A5.6 5.6 0 0 0 6.6 7.2 3.5 3.5 0 0 0 7.5 14.2z"/><path d="M13 16.2l-3 3.4h3l-1.4 2.6"/>'
 };
-const ico = (code, taille) => '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke-width="1.6" ' +
-  'stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--lav2)' + (taille ? ';width:' + taille + 'px;height:' + taille + 'px"' : '"') +
-  '>' + (GLYPHE[(WMO[code] || ["", "nuage"])[1]] || GLYPHE.nuage) + '</svg>';
+const WEMO = { soleil:'☀️', eclaircie:'🌤️', nuage:'☁️', brume:'🌫️', pluie:'🌧️', neige:'🌨️', orage:'⛈️' };
+const ico = (code, taille) => { const k = (WMO[code] || ["", "nuage"])[1]; const s = taille || 56; return '<span class="ic wemo" style="width:' + s + 'px;height:' + s + 'px;font-size:' + Math.round(s*0.78) + 'px">' + (WEMO[k] || WEMO.nuage) + '</span>'; };
 const libelle = code => (WMO[code] || ["Temps variable"])[0];
 
 function etatMeteo(titre, sous){
@@ -1111,8 +1124,8 @@ function meteoHTML(){
     '<div class="grow"><div class="tp mono">' + Math.round(c.temperature_2m) + '°</div>' +
     '<div class="lb">' + libelle(c.weather_code) + '</div>' +
     '<div class="vl">' + esc(m.ville || "") + (vieux ? " · données un peu anciennes" : "") + '</div></div>' +
-    '<div class="mm">' + (pluie != null ? "pluie <b>" + pluie + "%</b><br>" : "") +
-      "vent <b>" + Math.round(c.wind_speed_10m || 0) + "</b> km/h" +
+    '<div class="mm">' + (pluie != null ? "💧 <b>" + pluie + "%</b><br>" : "") +
+      "💨 <b>" + Math.round(c.wind_speed_10m || 0) + "</b> km/h" +
       (j.sunset ? "<br>coucher <b>" + (j.sunset[0] || "").slice(11,16) + "</b>" : "") + '</div></div>' +
     '<div class="jours">' + jours + '</div>' +
     '<div class="row" style="margin-top:13px"><span class="sm mut grow">' + conseilMeteo(c, j) + '</span>' +
@@ -1296,5 +1309,6 @@ $("#gDate").value = TODAY();
 render();
 setInterval(() => { if ($("#hdate").textContent && !fTimer) renderJour(); }, 60000);
 </script>
+<script>(function(){var s=document.getElementById("splash");if(!s)return;function h(){s.classList.add("hide");}setTimeout(h,1700);s.addEventListener("click",h);})();</script>
 </body>
 </html>
