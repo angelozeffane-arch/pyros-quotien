@@ -358,10 +358,27 @@ body.clair #appbg .wxmoon{background:radial-gradient(circle at 38% 38%,#fff,#c7c
 
 nav{display:none!important}
 
+/* chrono de session */
+#chrono{position:fixed;inset:0;z-index:1300;background:var(--veil);display:none;flex-direction:column;align-items:center;justify-content:center;padding:26px;text-align:center}
+#chrono.open{display:flex}
+#chrono .kick{margin:0 0 18px}
+#chrono .kick:after{display:none}
+#chTime{font-size:62px;font-weight:200;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+#chEtat{font-size:13px;color:var(--mut);margin-top:10px;min-height:18px}
+.chbtn{width:100%;max-width:280px;margin:26px 0 6px;padding:19px;border-radius:18px;border:none;
+  background:var(--lav);color:var(--btnink);font-weight:800;font-size:16px;letter-spacing:.05em;text-transform:uppercase}
+.chbtn:active{transform:scale(.98)}
+.chbtn.stop{background:var(--hot);color:#fff}
+#chrono .chips{justify-content:center;max-width:300px;margin-top:16px}
+#chJour{font-size:13.5px;color:var(--mut);margin-top:22px}
+#chJour b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.chx{position:absolute;top:calc(14px + env(safe-area-inset-top));right:16px;width:40px;height:40px;border-radius:12px;
+  background:none;border:1px solid var(--line2);color:var(--ink);font-size:18px;line-height:1}
+
 /* plein écran PYROS Avengers (même origine -> mêmes données) */
-#avnov{position:fixed;inset:0;z-index:1250;background:#0C0E17;display:none}
-#avnov.open{display:block}
-#avnov iframe{width:100%;height:100%;border:0;display:block;background:#0C0E17}
+#avnov,#vidov{position:fixed;inset:0;z-index:1250;background:#0C0E17;display:none}
+#avnov.open,#vidov.open{display:block}
+#avnov iframe,#vidov iframe{width:100%;height:100%;border:0;display:block;background:#0C0E17}
 .avnx{position:fixed;top:calc(12px + env(safe-area-inset-top));right:14px;z-index:1260;width:40px;height:40px;border-radius:12px;background:rgba(20,22,34,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.14);color:#e7e5fe;font-size:17px;line-height:1}
 .avnx:active{transform:scale(.92)}
 
@@ -541,6 +558,8 @@ html,body{overflow-x:hidden;max-width:100%;width:100%}
       <button onclick="goTab('taches')"><svg viewBox="0 0 24 24"><path d="M3.5 7l2 2 3.5-3.5"/><path d="M3.5 17l2 2 3.5-3.5"/><path d="M12.5 7.5h8M12.5 17.5h8"/></svg>Tâches</button>
       <button onclick="goTab('notes')"><svg viewBox="0 0 24 24"><rect x="4.5" y="3.5" width="15" height="17" rx="2.5"/><path d="M8.5 8.5h7M8.5 12.5h7M8.5 16.5h4"/></svg>Notes</button>
       <button onclick="goTab('agenda')"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3.5v3M16 3.5v3"/></svg>Agenda</button>
+      <button type="button" onclick="openVid()"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2.5"/><path d="M3 10.5h18M7.5 6l-1.6 4.5M13 6l-1.6 4.5"/><path d="M10 14.5l4 2.2-4 2.2z"/></svg>Vidéos</button>
+      <button type="button" onclick="openChrono()"><svg viewBox="0 0 24 24"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 13.5V9.5M9.5 2.5h5M19 7l1.5-1.5"/></svg>Chrono</button>
       <button type="button" onclick="openAvn()"><svg viewBox="0 0 24 24"><rect x="2.5" y="9.5" width="2.8" height="5" rx="1"/><rect x="5.8" y="7" width="3.4" height="10" rx="1.3"/><path d="M9.2 12h5.6"/><rect x="14.8" y="7" width="3.4" height="10" rx="1.3"/><rect x="18.7" y="9.5" width="2.8" height="5" rx="1"/></svg>Avengers</button>
     </div>
   </section>
@@ -696,6 +715,25 @@ html,body{overflow-x:hidden;max-width:100%;width:100%}
     <button class="btn ghost" id="fPause">Pause</button>
     <button class="btn ghost" id="fQuit">Fermer</button>
   </div>
+</div>
+
+<!-- ---- plan de contenu 200 vidéos ---- -->
+<div id="vidov"><button class="avnx" type="button" onclick="closeVid()">&times;</button><iframe id="vidfr" title="Plan de contenu vidéos"></iframe></div>
+
+<!-- ---- chrono de session ---- -->
+<div id="chrono">
+  <button class="chx" type="button" onclick="closeChrono()">&times;</button>
+  <div class="kick">Session de travail</div>
+  <div id="chTime" class="mono">00:00</div>
+  <div id="chEtat"></div>
+  <button class="chbtn" id="chBtn" type="button">Démarrer</button>
+  <div class="chips">
+    <button class="chip on" data-cib="0">Libre</button>
+    <button class="chip" data-cib="1500">25 min</button>
+    <button class="chip" data-cib="2700">45 min</button>
+    <button class="chip" data-cib="5400">90 min</button>
+  </div>
+  <div id="chJour">Aujourd'hui : <b>0 min</b></div>
 </div>
 
 <!-- ---- PYROS Avengers en plein écran ---- -->
@@ -1502,7 +1540,23 @@ try { dejaNotif = JSON.parse(sessionStorage.getItem("pyros_notif") || "{}"); } c
 const notifSave = () => { try { sessionStorage.setItem("pyros_notif", JSON.stringify(dejaNotif)); } catch(e){} };
 
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw-quotidien.js").then(r => { SWREG = r; }).catch(()=>{});
+  const dejaControle = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.register("sw-quotidien.js").then(r => {
+    SWREG = r;
+    r.update();                                             // cherche une nouvelle version au lancement
+    r.addEventListener("updatefound", () => {
+      const sw = r.installing;
+      if (sw) sw.addEventListener("statechange", () => {
+        if (sw.state === "installed" && navigator.serviceWorker.controller) sw.postMessage("skipWaiting");
+      });
+    });
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) r.update(); });
+  }).catch(()=>{});
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (!dejaControle || window._majEnCours) return;         // nouvelle version prête : on recharge une fois
+    window._majEnCours = true;
+    location.reload();
+  });
 }
 
 async function notifier(titre, corps){
@@ -1614,6 +1668,113 @@ $("#btnTheme").addEventListener("click", () => {
   save(); appliquerTheme(); render(); try{_abgKey=null;updateAppBg();}catch(e){}
 });
 appliquerTheme();
+
+/* ============ plan de contenu vidéos ============ */
+const VID_URL = "planning-videos.html";
+function openVid(){
+  const ov = document.getElementById("vidov"), fr = document.getElementById("vidfr");
+  if (!ov || !fr) return;
+  if (!fr.getAttribute("src")) fr.setAttribute("src", VID_URL);
+  ov.classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeVid(){
+  const ov = document.getElementById("vidov");
+  if (!ov) return;
+  ov.classList.remove("open");
+  document.body.style.overflow = "";
+}
+window.openVid = openVid; window.closeVid = closeVid;
+
+/* ============ chrono de session ============ */
+S.chrono = S.chrono || { sessions:{}, run:null, cible:0 };
+let chTic = null, chWake = null;
+
+const chSecs = () => S.chrono.run ? Math.max(0, Math.floor((Date.now() - S.chrono.run) / 1000)) : 0;
+function chFmt(s){
+  const hh = Math.floor(s/3600), mm = Math.floor(s%3600/60), ss = s%60;
+  return (hh ? hh + ":" : "") + pad(mm) + ":" + pad(ss);
+}
+function chDuree(s){
+  const hh = Math.floor(s/3600), mm = Math.round(s%3600/60);
+  return hh ? hh + " h " + pad(mm) : mm + " min";
+}
+
+async function chWakeOn(){
+  try { if (navigator.wakeLock && !chWake) chWake = await navigator.wakeLock.request("screen"); } catch(e){}
+}
+function chWakeOff(){ try { if (chWake) { chWake.release(); chWake = null; } } catch(e){} }
+
+function chBip(){
+  try {
+    const A = window.AudioContext || window.webkitAudioContext; if (!A) return;
+    const c = new A(), o = c.createOscillator(), g = c.createGain();
+    o.connect(g); g.connect(c.destination); o.type = "sine"; o.frequency.value = 880;
+    g.gain.setValueAtTime(.0001, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(.35, c.currentTime + .02);
+    g.gain.exponentialRampToValueAtTime(.0001, c.currentTime + 1.1);
+    o.start(); o.stop(c.currentTime + 1.2);
+  } catch(e){}
+}
+
+function chBanque(){
+  const s = chSecs(); if (s < 5) return 0;
+  const t = TODAY();
+  S.chrono.sessions[t] = (S.chrono.sessions[t] || 0) + s;
+  return s;
+}
+
+function chStart(){
+  S.chrono.run = Date.now(); save(); chWakeOn(); chRender();
+}
+function chStop(silence){
+  const s = chBanque();
+  S.chrono.run = null; save(); chWakeOff(); chRender();
+  if (!silence && s) notifier("Session terminée", chDuree(s) + " de travail. Total du jour : " + chDuree(chTotJour()) + ".");
+}
+function chTotJour(){ return (S.chrono.sessions[TODAY()] || 0) + (S.chrono.run ? chSecs() : 0); }
+
+function chRender(){
+  const n = $("#chTime"); if (!n) return;
+  const e = chSecs(), cib = S.chrono.cible;
+  n.textContent = chFmt(cib ? Math.max(0, cib - e) : e);
+  const b = $("#chBtn");
+  b.textContent = S.chrono.run ? "Stop" : "Démarrer";
+  b.classList.toggle("stop", !!S.chrono.run);
+  $("#chEtat").textContent = S.chrono.run
+    ? (cib ? "Compte à rebours en cours" : "En cours")
+    : (cib ? "Prêt · " + chDuree(cib) : "Prêt");
+  $("#chJour").innerHTML = "Aujourd'hui : <b>" + chDuree(chTotJour()) + "</b>";
+  document.querySelectorAll("[data-cib]").forEach(x => x.classList.toggle("on", +x.dataset.cib === cib));
+  if (cib && S.chrono.run && e >= cib) {
+    chStop(true);
+    if (navigator.vibrate) navigator.vibrate([250,120,250,120,250]);
+    chBip();
+    notifier("Temps écoulé", chDuree(cib) + " bouclées. Total du jour : " + chDuree(chTotJour()) + ".");
+  }
+}
+
+function openChrono(){
+  const o = $("#chrono"); if (!o) return;
+  o.classList.add("open"); chRender();
+  clearInterval(chTic); chTic = setInterval(chRender, 1000);
+  if (S.chrono.run) chWakeOn();
+}
+function closeChrono(){
+  const o = $("#chrono"); if (!o) return;
+  o.classList.remove("open"); clearInterval(chTic); chTic = null;
+}
+window.openChrono = openChrono; window.closeChrono = closeChrono;
+
+document.addEventListener("click", e => {
+  if (e.target.closest("#chBtn")) return S.chrono.run ? chStop() : chStart();
+  const c = e.target.closest("[data-cib]");
+  if (c) {
+    if (S.chrono.run) chStop(true);
+    S.chrono.cible = +c.dataset.cib; save(); chRender();
+  }
+});
+document.addEventListener("visibilitychange", () => { if (!document.hidden && S.chrono.run) { chWakeOn(); chRender(); } });
 
 /* ============ PYROS Avengers ============ */
 const AVN_URL = "https://angelozeffane-arch.github.io/pyros-avengers/index.html";
