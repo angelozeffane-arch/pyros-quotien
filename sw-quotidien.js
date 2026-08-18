@@ -4,7 +4,7 @@
 
 const VERSION = "2026-08-17-1";
 const CACHE   = "pyros-quotidien-" + VERSION;
-const ASSETS  = ["./", "./index.html", "./planning-videos.html", "./manifest-quotidien.json", "./icon-192.png"];
+const ASSETS  = ["./", "./index.html", "./manifest-quotidien.json", "./icon-192.png"];
 
 self.addEventListener("install", e => {
   self.skipWaiting();
